@@ -5,16 +5,8 @@
 
 # Задание № 1
 
-def my_map(func, list_of_values):
-    return (func(value) for value in list_of_values)
-
-
-def process_numbers(list_of_numbers):
-    return [num ** 2 for num in list(list_of_numbers)]
-
-
 def power_numbers(*args):
-    return list(my_map(process_numbers, args))
+    return list(map(lambda x: x ** 2, args))
 
 # Задание № 2
 
