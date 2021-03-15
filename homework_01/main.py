@@ -26,10 +26,11 @@ def is_prime(n):
 
 
 FILTERS_MAP = {
-    ODD: lambda x: x % 2 != 0,
-    EVEN: lambda x: x % 2 == 0,
-    PRIME: lambda x: is_prime(x), list_of_numbers
+    ODD: lambda n: n % 2 != 0,
+    EVEN: lambda n: n % 2 == 0,
+    PRIME: is_prime,
 }
+
 
 def filter_numbers(list_of_numbers, type_of_number):
     return list(filter(FILTERS_MAP[type_of_number], list_of_numbers))
