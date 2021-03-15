@@ -6,7 +6,7 @@
 # Задание № 1
 
 def power_numbers(*args):
-    return list(map(lambda x: x ** 2, args))
+    return [x ** 2 for x in args]
 
 # Задание № 2
 
@@ -25,9 +25,11 @@ def is_prime(n):
    return True
 
 
+FILTERS_MAP = {
+    ODD: lambda x: x % 2 != 0,
+    EVEN: lambda x: x % 2 == 0,
+    PRIME: lambda x: is_prime(x), list_of_numbers
+}
+
 def filter_numbers(list_of_numbers, type_of_number):
-    return {
-        ODD: list(filter(lambda x: x % 2 != 0, list_of_numbers)),
-        EVEN: list(filter(lambda x: x % 2 == 0, list_of_numbers)),
-        PRIME: list(filter(lambda x: is_prime(x), list_of_numbers))
-    }[type_of_number]
+    return list(filter(FILTERS_MAP[type_of_number], list_of_numbers))
