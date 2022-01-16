@@ -11,7 +11,6 @@
 
 from abc import ABC
 from homework_02.exceptions import LowFuelError, NotEnoughFuel
-# from add import func_name
 
 class Vehicle():
     
@@ -26,17 +25,14 @@ class Vehicle():
         self.fuel_consumption = fuel_consumption
 
     def start(self):
-        if self.started != True: # проверяем, что мы находимся не в состоянии движения и сразу же количество оставшегося топлива
+        if self.started != True:
             if self.fuel <= 0:
-                raise LowFuelError("WARNING: the fuel is very low ...") # выбрасываем исключение о том, что топлива осталось мало (если его количество меньше или равно нуля)
+                raise LowFuelError
             else:
-                self.started = True # включаем двигатель (если он еще не включен и количество оставшегося топлива больше нуля)
+                self.started = True
 
     def move(self, distance):
-        if self.fuel < (distance * self.fuel_consumption): # сравниваем количество оставшегося топлива с произведением расхода топлива и оставшихся единиц дистанции
-            self.started = False # выключаем двигатель, так как ехать машина более не может (топливо кончилось)
-            raise NotEnoughFuel("CRITICAL: the fuel is not enough ...") # выбрасываем исключение о недостаточном количестве топлива
-        self.fuel -= self.fuel_consumption*distance # сокращаем топливо на обычный расход за единицу дистанции
-
-    def __str__(self):
-        return f"{self.__class__.__name__} module is called"
+        if self.fuel < (distance * self.fuel_consumption):
+            self.started = False
+            raise NotEnoughFuel
+        self.fuel -= self.fuel_consumption * distance

@@ -6,8 +6,6 @@
 """
 
 from homework_02.base import Vehicle
-# from add import func_name
-
 
 class Car(Vehicle):
 
@@ -18,4 +16,3 @@ class Car(Vehicle):
 
     def set_engine(self, new_engine):
         self.engine = new_engine
-        # print("Engine", new_engine, "is added to the car")

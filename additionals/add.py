@@ -9,3 +9,6 @@ def func_name(func):
         print("... finish method:", func.__name__)
         print("---------------------------")
     return print_func
+
+    # def __str__(self):
+    #     return f"{self.__class__.__name__} module is called"

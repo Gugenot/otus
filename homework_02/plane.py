@@ -9,8 +9,6 @@
 
 from homework_02.base import Vehicle
 from homework_02.exceptions import CargoOverload
-# from add import func_name
-
 
 class Plane(Vehicle):
 
@@ -25,7 +23,7 @@ class Plane(Vehicle):
 
     def load_cargo(self, addition):
         if self.max_cargo < self.cargo + addition:   
-            raise CargoOverload("CRITICAL: the cargo is overloaded!")
+            raise CargoOverload
         self.cargo += addition
 
     def remove_all_cargo(self):
