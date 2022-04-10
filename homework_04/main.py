@@ -25,6 +25,8 @@ from models import Base, User, Post
 from jsonplaceholder_requests import fetch_json, USERS_DATA_URL, POSTS_DATA_URL
 from aiohttp import ClientSession, ClientResponse
 
+from loguru import logger
+
 
 engine = create_async_engine(
     config.SQLA_ASYNC_CONN_URI,
@@ -41,54 +43,79 @@ async_session = sessionmaker(
 
 async def create_schemas():
 
+    logger.info("Enter module create_schemas")
+
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
 
 
-async def create_user(session: AsyncSession, url: str):
+async def fetch_user_data():
 
-  async with ClientSession() as http_session:
-    json_users_data = await fetch_json(http_session, url)
-    for item in json_users_data:
-        user = User(
+  logger.info("Enter module fetch_user_data")
+    
+  async with ClientSession() as session:
+    json_users_data = await fetch_json(session, USERS_DATA_URL)
+    return json_users_data
+
+
+async def fetch_post_data():
+
+  logger.info("Enter module fetch_post_data")
+
+  async with ClientSession() as session:
+    json_posts_data = await fetch_json(session, POSTS_DATA_URL)
+    return json_posts_data
+
+
+async def save_data_to_db(session: AsyncSession, json_users_data: list, json_posts_data: list):
+
+  logger.info("Enter module save_data_to_db")
+
+  users = [
+        User(
           id=item["id"],
           name=item["name"],
           username=item["username"],
           email=item["email"]
-        )
-        session.add(user)
+        ) 
+        for item in json_users_data
+  ]
+  session.add_all(users)
 
-
-async def create_post(session: AsyncSession, url: str):
-
-  async with ClientSession() as http_session:
-    json_posts_data = await fetch_json(http_session, url)
-    for item in json_posts_data:
-        post = Post(
+  posts = [
+        Post(
           id=item["id"],
           title=item["title"],
           body=item["body"],
           user_id=item["userId"]
-        )
-        session.add(post)
+        ) 
+        for item in json_posts_data
+  ]
+  session.add_all(posts)
+
+  await session.commit()
 
 
 async def async_main():
 
-    async with async_session() as session:
-        await create_schemas()
+  logger.info("Enter module async_main")
 
-        coro = asyncio.gather(
-          create_user(session, USERS_DATA_URL), 
-          create_post(session, POSTS_DATA_URL),
-        )
+  async with async_session() as session:
+    
+    await create_schemas()
 
-        await coro
-        await session.commit()
+    json_users_data, json_posts_data = await asyncio.gather(
+      fetch_user_data(), 
+      fetch_post_data(),
+    )
+
+    await save_data_to_db(session, json_users_data, json_posts_data)
 
 
 def main():
+
+    logger.info("Enter module main")
 
     asyncio.run(async_main())
 
