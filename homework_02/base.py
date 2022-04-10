@@ -25,7 +25,7 @@ class Vehicle():
         self.fuel_consumption = fuel_consumption
 
     def start(self):
-        if self.started != True:
+        if not self.started:
             if self.fuel <= 0:
                 raise LowFuelError
             else:
@@ -33,6 +33,5 @@ class Vehicle():
 
     def move(self, distance):
         if self.fuel < (distance * self.fuel_consumption):
-            self.started = False
             raise NotEnoughFuel
         self.fuel -= self.fuel_consumption * distance
