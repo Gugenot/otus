@@ -58,8 +58,6 @@ async def create_user(session: AsyncSession, url: str):
           email=item["email"]
         )
         session.add(user)
-    await session.commit()
-    # await session.refresh(user)
 
 
 async def create_post(session: AsyncSession, url: str):
@@ -74,21 +72,20 @@ async def create_post(session: AsyncSession, url: str):
           user_id=item["userId"]
         )
         session.add(post)
-    await session.commit()
-    # await session.refresh(post)
 
 
 async def async_main():
 
     async with async_session() as session:
-        # await create_schemas()
+        await create_schemas()
 
         coro = asyncio.gather(
-          # create_user(session, USERS_DATA_URL), 
+          create_user(session, USERS_DATA_URL), 
           create_post(session, POSTS_DATA_URL),
         )
 
         await coro
+        await session.commit()
 
 
 def main():
