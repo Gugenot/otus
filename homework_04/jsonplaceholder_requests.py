@@ -21,7 +21,6 @@ POSTS_DATA_URL = FAKEAPI_URL + "/posts"
 
 async def fetch_json(session: ClientSession, url: str) -> dict:
     logger.info("Fetch url {}", url)
-    async with session.get(url) as response: # type: ClientResponse
+    async with session.get(url) as response: 
         response_json = await response.json()
-        # logger.info("Fetched url {} and got data {}", response.url, response_json)
         return response_json
