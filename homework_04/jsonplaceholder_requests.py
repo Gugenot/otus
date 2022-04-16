@@ -8,9 +8,8 @@
 
 """
 
-import asyncio
 
-from aiohttp import ClientSession, ClientResponse
+from aiohttp import ClientSession
 
 from loguru import logger
 

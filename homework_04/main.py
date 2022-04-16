@@ -16,14 +16,13 @@
 
 import asyncio
 
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 import config
 from models import Base, User, Post
 from jsonplaceholder_requests import fetch_json, USERS_DATA_URL, POSTS_DATA_URL
-from aiohttp import ClientSession, ClientResponse
+from aiohttp import ClientSession
 
 from loguru import logger
 
@@ -50,22 +49,24 @@ async def create_schemas():
         await conn.run_sync(Base.metadata.create_all)
 
 
-async def fetch_user_data():
+async def fetch_user_data(session):
 
   logger.info("Enter module fetch_user_data")
     
-  async with ClientSession() as session:
-    json_users_data = await fetch_json(session, USERS_DATA_URL)
-    return json_users_data
+  # async with ClientSession() as session:
+  json_users_data = await fetch_json(session, USERS_DATA_URL)
+  
+  return json_users_data
 
 
-async def fetch_post_data():
+async def fetch_post_data(session):
 
   logger.info("Enter module fetch_post_data")
 
-  async with ClientSession() as session:
-    json_posts_data = await fetch_json(session, POSTS_DATA_URL)
-    return json_posts_data
+  # async with ClientSession() as session:
+  json_posts_data = await fetch_json(session, POSTS_DATA_URL)
+  
+  return json_posts_data
 
 
 async def save_data_to_db(session: AsyncSession, json_users_data: list, json_posts_data: list):
@@ -106,8 +107,8 @@ async def async_main():
     await create_schemas()
 
     json_users_data, json_posts_data = await asyncio.gather(
-      fetch_user_data(), 
-      fetch_post_data(),
+      fetch_user_data(session), 
+      fetch_post_data(session),
     )
 
     await save_data_to_db(session, json_users_data, json_posts_data)
