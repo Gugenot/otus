@@ -13,7 +13,7 @@
 - закрытие соединения с БД
 """
 
-
+import os 
 import asyncio
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
@@ -25,6 +25,9 @@ from jsonplaceholder_requests import fetch_json, USERS_DATA_URL, POSTS_DATA_URL
 from aiohttp import ClientSession
 
 from loguru import logger
+
+
+PG_CONN_URI = "postgresql+pg8000://user:password@localhost/homework4"
 
 
 engine = create_async_engine(
