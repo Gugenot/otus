@@ -27,7 +27,7 @@ from aiohttp import ClientSession
 from loguru import logger
 
 
-PG_CONN_URI = "postgresql+pg8000://user:password@localhost/homework4"
+PG_CONN_URI = "postgresql+asyncpg://postgres:secretpassword@localhost:5432/postgres"
 
 
 engine = create_async_engine(
