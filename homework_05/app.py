@@ -14,12 +14,10 @@
 from flask import Flask
 
 from .views.about import about_app
+from .views.home import home_app
 
 app = Flask(__name__)
 
 app.register_blueprint(about_app, url_prefix="/about")
 
-
-@app.get("/")
-def hello_page():
-    return "<p>Hello, the students!</p>"
+app.register_blueprint(home_app, url_prefix="/")
